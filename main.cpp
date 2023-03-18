@@ -11,7 +11,10 @@ int main()
 
     bool checker;
     int input;
-    cout << "Enter option: " << endl;
+    cout << "[1] Add projects: " << endl;
+    cout << "[2] View Projects " << endl;
+    cout << "[3] Schedule Projects" << endl;
+    cout << "[4] Get a project" << endl;
     cin >> checker;
 
     while(true) 
@@ -21,6 +24,7 @@ int main()
             case 1:
                 cout << "Enter a new project";
                 projectObject.addProject(project);
+                projectObject.openProjectFile();
                 break;
         }
     }

@@ -12,10 +12,10 @@ using namespace std;
 
 struct projectDetail
 {
-    int projectId; // project iD number
-    std::string projectTitle; // project title
-    int projectPageSize; // project page sizew
-    int priority; // for priority sorting
+    int Id; // project iD number
+    std::string Title; // project title
+    int PageSize; // project page sizew
+    int Priority; // for priority sorting
 };
 
 class projectDetailList
@@ -34,5 +34,7 @@ class projectDetailList
         projectDetailList();
 
         void addProject(projectDetail projectDetail);
+        void openProjectFile();
+        void saveProjectFile();
 
 };
