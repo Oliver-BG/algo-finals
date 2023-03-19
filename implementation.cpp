@@ -136,4 +136,10 @@ void projectDetailList::saveProjectFile()
 
         projectFile = projectFile->Next;
     }
+    projectFileText.close();
+}
+
+void projectDetailList::testingbreak()
+{
+    cout << "Tangian mo it works";
 }
