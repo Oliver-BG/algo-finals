@@ -28,7 +28,7 @@ void projectDetailList::addProject(projectDetail move)
     {
         projectHead = projectListNewNode;
         lastCode = -1;
-        projectListNewNode->move.projectId = 0;
+        projectListNewNode->move.Id = 0;
         isempty = 1;
     }
     else
@@ -37,7 +37,7 @@ void projectDetailList::addProject(projectDetail move)
         {
             movNodePtr = movNodePtr->Next;
         }
-        lastCode = movNodePtr->move.projectId;
+        lastCode = movNodePtr->move.Id;
         movNodePtr->Next = projectListNewNode;
     }
 
@@ -50,18 +50,92 @@ void projectDetailList::addProject(projectDetail move)
     cout << "Enter the Project Page Size: ";
     cin >> projectPageSize;
 
-    projectListNewNode->move.projectId = projectId;
-    projectListNewNode->move.projectTitle = projectTitle;
-    projectListNewNode->move.projectPageSize = projectPageSize;
-
+    projectListNewNode->move.Id = projectId;
+    projectListNewNode->move.Title = projectTitle;
+    projectListNewNode->move.PageSize = projectPageSize;
 
     if (!isempty)
     {
 
         movNodePtr = movNodePtr->Next;
 
-        movNodePtr->move.projectId = lastCode + 1;
+        movNodePtr->move.Id = lastCode + 1;
     }
 
     cout << "\nYou have successfully added the Project!\n";
 }
+
+void projectDetailList::openProjectFile()
+{
+    ifstream openProjectFile;
+    openProjectFile.open("Projects.txt");
+
+    projectListNode *projectListNewNode;
+
+    projectListNode *openFilePtr = projectHead;
+
+    string tempString;
+
+    int projectId;
+    string projectTitle;
+    int projectPageSize;
+    int projectPriority;
+
+    while (getline(openProjectFile, tempString))
+    {
+        cout << tempString;
+
+        projectListNewNode = new projectListNode;
+
+        projectListNewNode->move.Id = projectId;
+        projectListNewNode->move.Title = projectTitle;
+        projectListNewNode->move.PageSize = projectPageSize;
+        projectListNewNode->move.Priority = projectPriority;
+
+        projectListNewNode->Next = NULL;
+
+        if (!projectHead)
+        {
+            projectHead = projectListNewNode;
+            openFilePtr = projectHead;
+        }
+        else
+        {
+            openFilePtr->Next = projectListNewNode;
+            openFilePtr = openFilePtr->Next;
+        }
+    }
+
+    openProjectFile.close();
+}
+
+void projectDetailList::saveProjectFile()
+{
+    ofstream projectFileText;
+    projectFileText.open("Projects.txt");
+    projectListNode *projectFile;
+    projectFile = projectHead;
+
+    while(projectFile != NULL)
+    {
+        projectFileText << "Project ID: ";
+        projectFileText << projectFile->move.Id;
+        projectFileText << endl;
+
+        projectFileText << "Project Title: ";
+        projectFileText << projectFile->move.Title;
+        projectFileText << endl;
+
+        projectFileText << "Project Page Size: ";
+        projectFileText << projectFile->move.PageSize;
+        projectFileText << endl;
+
+        projectFileText << "Project Priority: ";
+        projectFileText << projectFile->move.Priority;
+        projectFileText << endl;
+
+        projectFile = projectFile->Next;
+    }
+    projectFileText.close();
+}
+
