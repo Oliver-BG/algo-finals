@@ -139,7 +139,3 @@ void projectDetailList::saveProjectFile()
     projectFileText.close();
 }
 
-void projectDetailList::testingbreak()
-{
-    cout << "Tangian mo it works";
-}
