@@ -20,7 +20,7 @@ int main()
         cout << "[4] Get a Project" << endl;
         cout << "[5] Exit" << endl;
         cin >> input;
-
+        int choice;
         switch (input)
         {
         case 1:
@@ -30,9 +30,25 @@ int main()
             projectObject.saveProjectFile();*/
             break;
         case 2:
+            do{
+                    cout << "||View Projects|| \n\n";
+                    cout << "[1] View One Project" << endl;
+                    cout << "[2] View Completed Projects" << endl;
+                    cout << "[3] All Projects" << endl;
+                    cout << "[4] Exit"<<endl;
+                    cin >> choice;
+                    switch(choice){
+                        case 1:
+                            break;
+                        case 2:
+                            projectObject.CompletedProjects();
+                            break;
+                        default:
+                            break;
+                    }
+                }while(choice != 4);
             break;
         case 3:                                     //new case for scheduling function
-            int choice;
                 do{
                     cout << "||Scheduling Projects|| \n\n";
                     cout << "[1] Create Schedule" << endl;

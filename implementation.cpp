@@ -79,21 +79,17 @@ void projectDetailList::openProjectFile()
 
     string tempString;
 
-    int projectId;
-    string projectTitle;
-    int projectPageSize;
-    int projectPriority;
 
-    while (getline(openProjectFile, tempString))
+    while (openProjectFile.eof())
     {
-        cout << tempString;
 
         projectListNewNode = new projectListNode;
 
-        projectListNewNode->move.Id = projectId;
-        projectListNewNode->move.Title = projectTitle;
-        projectListNewNode->move.PageSize = projectPageSize;
-        projectListNewNode->move.Priority = projectPriority;
+        openProjectFile >> projectListNewNode->move.Id;
+        openProjectFile.ignore();
+        getline(openProjectFile, projectListNewNode->move.Title, '\n');
+        openProjectFile >> projectListNewNode->move.PageSize;
+        openProjectFile >> projectListNewNode->move.Priority;
 
         projectListNewNode->Next = NULL;
 
@@ -260,9 +256,30 @@ void projectDetailList::GetProject()
         cout << "[Current Project is completed]" << endl;
     }
 
-    cout << "\n\t\t[[[All projects have been processed]]]" << endl;
+    cout << "\n\t\t[[[All projects have been copy-typed]]]" << endl;
 }
 
 void projectDetailList::CompletedProjects()
 {
+    ifstream compproj("completeproj.txt");
+    projectDetail temp;
+    while(!compproj.eof()){
+        compproj >> temp.Id;
+        compproj.ignore();
+        getline(compproj, temp.Title, '\n');
+        compproj >> temp.PageSize;
+        compproj >> temp.Priority;
+        completed.push_back(temp);
+    }
+    list<projectDetail>::iterator i;
+    cout<<"ID\t\tTitle\t\tPageSize\tPriority\n"<<endl;
+    for(auto i = completed.begin(); i != completed.end(); ++i){
+        cout<<i->Id<<"\t\t"<<i->Title<<"\t\t"<<i->PageSize<<"\t\t"<<i->Priority<<endl;
+    }
+}
+
+void projectDetailList::projectexistenceincompleteproject()
+{
+
+
 }
