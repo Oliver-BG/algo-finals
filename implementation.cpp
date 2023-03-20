@@ -117,25 +117,23 @@ void projectDetailList::saveProjectFile()
 
     while (projectFile != NULL)
     {
-        projectFileText << "Project ID: ";
         projectFileText << projectFile->move.Id;
+        projectFileText << " iD";
         projectFileText << endl;
 
-        projectFileText << "Project Title: ";
         projectFileText << projectFile->move.Title;
+        projectFileText << " Project Title";
         projectFileText << endl;
 
-        projectFileText << "Project Page Size: ";
         projectFileText << projectFile->move.PageSize;
+        projectFileText << " Project Page Size";
         projectFileText << endl;
 
-        projectFileText << "Project Priority: ";
         projectFileText << projectFile->move.Priority;
+        projectFileText << " Project Priority";
         projectFileText << endl;
-
         projectFile = projectFile->Next;
     }
-    projectFileText.close();
 }
 
 void projectDetailList::CreateSched() // functions below are new functions for scheduling functions

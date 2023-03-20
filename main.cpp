@@ -26,8 +26,8 @@ int main()
         case 1:
             cout << "Enter a new project";
             projectObject.addProject(project);
-            /*projectObject.openProjectFile();      //nicomment ko muna these functions cuz inconsistent ung input sa data
-            projectObject.saveProjectFile();*/
+            projectObject.openProjectFile();      //nicomment ko muna these functions cuz inconsistent ung input sa data
+            projectObject.saveProjectFile();
             break;
         case 2:
             do{
