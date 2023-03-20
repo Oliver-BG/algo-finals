@@ -34,6 +34,7 @@ class projectDetailList
     
     public: 
         deque <projectDetail> proj;         //new deque for Scheduling Functions
+        list<projectDetail> completed;
         projectDetailList();
 
         void addProject(projectDetail projectDetail);
@@ -43,5 +44,6 @@ class projectDetailList
         void ViewUpdatedSched();
         void GetProject();
         void CompletedProjects();
+        void projectexistenceincompleteproject();
 
 };
