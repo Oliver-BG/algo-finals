@@ -8,37 +8,36 @@ projectDetailList::projectDetailList()
 
 void projectDetailList::addProject(projectDetail move)
 {
-    int lastCode;
 
+    int lastCode;
     int projectId;            // project iD number
     std::string projectTitle; // project title
     int projectPageSize;      // project page sizew
     int priority;             // for priority sorting
 
-    int isempty = 0;
+    int isEmpty = 0;
 
-    projectListNode *movNodePtr = projectHead;
-    projectListNode *projectListNewNode;
-    projectListNode *temp;
+    projectListNode *moveNodePtr = projectHead;
+    projectListNode *projectNewNode;
 
-    projectListNewNode = new projectListNode;
-    projectListNewNode->Next = NULL;
+    projectNewNode = new projectListNode;
+    projectNewNode->Next = NULL;
 
     if (!projectHead)
     {
-        projectHead = projectListNewNode;
+        projectHead = projectNewNode;
         lastCode = 0;
-        projectListNewNode->move.Id = 0;
-        isempty = 1;
+        projectNewNode->move.Id = 1;
+        isEmpty = 1;
     }
     else
     {
-        while (movNodePtr->Next)
+        while (moveNodePtr->Next)
         {
-            movNodePtr = movNodePtr->Next;
+            moveNodePtr = moveNodePtr->Next;
         }
-        lastCode = movNodePtr->move.Id;
-        movNodePtr->Next = projectListNewNode;
+        lastCode = moveNodePtr->move.Id;
+        moveNodePtr->Next = projectNewNode;
     }
 
     cout << "Project Id : " << lastCode + 1 << endl;
@@ -53,17 +52,17 @@ void projectDetailList::addProject(projectDetail move)
     cout << "Enter the Project's Priority: ";
     cin >> priority;
 
-    projectListNewNode->move.Id = projectId;
-    projectListNewNode->move.Title = projectTitle;
-    projectListNewNode->move.PageSize = projectPageSize;
-    projectListNewNode->move.Priority = priority;
+    projectNewNode->move.Id = lastCode + 1;
+    projectNewNode->move.Title = projectTitle;
+    projectNewNode->move.PageSize = projectPageSize;
+    projectNewNode->move.Priority = priority;
 
-    if (!isempty)
+    if (!isEmpty)
     {
 
-        movNodePtr = movNodePtr->Next;
+        moveNodePtr = moveNodePtr->Next;
 
-        movNodePtr->move.Id = lastCode + 1;
+        moveNodePtr->move.Id = lastCode + 1;
     }
 
     cout << "\nYou have successfully added the Project!\n";
@@ -120,7 +119,7 @@ void projectDetailList::saveProjectFile()
     projectListNode *projectFile;
     projectFile = projectHead;
 
-    while(projectFile != NULL)
+    while (projectFile != NULL)
     {
         projectFileText << "Project ID: ";
         projectFileText << projectFile->move.Id;
@@ -143,50 +142,55 @@ void projectDetailList::saveProjectFile()
     projectFileText.close();
 }
 
-void projectDetailList::CreateSched()               //functions below are new functions for scheduling functions
+void projectDetailList::CreateSched() // functions below are new functions for scheduling functions
 {
-    //clears data from queue when called again considering queue is not empty
-    if(!proj.empty())
-        while(!proj.empty())
+    // clears data from queue when called again considering queue is not empty
+    if (!proj.empty())
+        while (!proj.empty())
             proj.pop_front();
 
     projectDetail temp = projectDetail();
     list<projectDetail> templist;
     projectListNode *projectword;
-    //sorts linked list first with lower priority means higher priority and if same, sort by page size in ascending order
-    for(projectword = projectHead; projectword != NULL ;projectword=projectword->Next){
+    // sorts linked list first with lower priority means higher priority and if same, sort by page size in ascending order
+    for (projectword = projectHead; projectword != NULL; projectword = projectword->Next)
+    {
         templist.push_front(projectword->move);
     }
     list<projectDetail>::iterator prt;
 
-    for(auto prt = templist.begin(); prt != templist.end(); ++prt){
-        for(auto prt2 = templist.begin(); prt2 != templist.end(); ++prt2){
-            if(prt->Priority > prt2->Priority){
+    for (auto prt = templist.begin(); prt != templist.end(); ++prt)
+    {
+        for (auto prt2 = templist.begin(); prt2 != templist.end(); ++prt2)
+        {
+            if (prt->Priority > prt2->Priority)
+            {
                 temp.Id = prt->Id;
                 temp.PageSize = prt->PageSize;
                 temp.Priority = prt->Priority;
                 temp.Title = prt->Title;
-                
-                prt->Id = prt2 -> Id;
-                prt->PageSize = prt2 -> PageSize;
-                prt->Priority = prt2 -> Priority;
-                prt->Title = prt2 -> Title;
+
+                prt->Id = prt2->Id;
+                prt->PageSize = prt2->PageSize;
+                prt->Priority = prt2->Priority;
+                prt->Title = prt2->Title;
 
                 prt2->Id = temp.Id;
                 prt2->PageSize = temp.PageSize;
                 prt2->Priority = temp.Priority;
                 prt2->Title = temp.Title;
             }
-            else if((prt->Priority == prt2->Priority)&&(prt->PageSize > prt2->PageSize)){
+            else if ((prt->Priority == prt2->Priority) && (prt->PageSize > prt2->PageSize))
+            {
                 temp.Id = prt->Id;
                 temp.PageSize = prt->PageSize;
                 temp.Priority = prt->Priority;
                 temp.Title = prt->Title;
-                
-                prt->Id = prt2 -> Id;
-                prt->PageSize = prt2 -> PageSize;
-                prt->Priority = prt2 -> Priority;
-                prt->Title = prt2 -> Title;
+
+                prt->Id = prt2->Id;
+                prt->PageSize = prt2->PageSize;
+                prt->Priority = prt2->Priority;
+                prt->Title = prt2->Title;
 
                 prt2->Id = temp.Id;
                 prt2->PageSize = temp.PageSize;
@@ -195,31 +199,35 @@ void projectDetailList::CreateSched()               //functions below are new fu
             }
         }
     }
-        for(auto prt = templist.begin(); prt != templist.end(); ++prt){
-            temp.Id = prt->Id;
-            temp.PageSize = prt->PageSize;
-            temp.Priority = prt->Priority;
-            temp.Title = prt->Title;
-            proj.push_front(temp);
-        }
+    for (auto prt = templist.begin(); prt != templist.end(); ++prt)
+    {
+        temp.Id = prt->Id;
+        temp.PageSize = prt->PageSize;
+        temp.Priority = prt->Priority;
+        temp.Title = prt->Title;
+        proj.push_front(temp);
+    }
 
-    if(!proj.empty())
-        cout<<"Created A New Schedule"<<endl;
+    if (!proj.empty())
+        cout << "Created A New Schedule" << endl;
     else
-        cout<<"Schedule wasn't successfully created"<<endl;
+        cout << "Schedule wasn't successfully created" << endl;
 }
 
-void projectDetailList::ViewUpdatedSched(){
+void projectDetailList::ViewUpdatedSched()
+{
     projectDetail temp1 = projectDetail();
-    deque <projectDetail> temp2;
+    deque<projectDetail> temp2;
     temp2 = proj;
-    if(temp2.empty()){
-        cout<<"There's no created schedule yet."<<endl;
+    if (temp2.empty())
+    {
+        cout << "There's no created schedule yet." << endl;
         return;
     }
-    while(!temp2.empty()){
+    while (!temp2.empty())
+    {
         temp1 = temp2.front();
-        cout<<temp1.Id<<"\t"<<temp1.Title<<"\t"<<temp1.Priority<<"\t"<<temp1.PageSize<<endl;
+        cout << temp1.Id << "\t" << temp1.Title << "\t" << temp1.Priority << "\t" << temp1.PageSize << endl;
         temp2.pop_front();
     }
 }
@@ -227,15 +235,17 @@ void projectDetailList::ViewUpdatedSched(){
 void projectDetailList::GetProject()
 {
     ofstream completeproj("completeproj.txt");
-    if(proj.empty()){
-        cout<<"Currently you have not created a schedule yet"<<endl;
+    if (proj.empty())
+    {
+        cout << "Currently you have not created a schedule yet" << endl;
         return;
     }
     projectDetail temp;
-    while(!proj.empty()){
+    while (!proj.empty())
+    {
         temp = proj.front();
-        cout<<"[Project Id\tProject Title\tProjectPriority\tProjectPageSize]"<<endl;
-        cout<<"["<<temp.Id<<"\t\t"<<temp.Title<<"\t"<<temp.Priority<<"\t"<<temp.PageSize<<"]"<<endl;
+        cout << "[Project Id\tProject Title\tProjectPriority\tProjectPageSize]" << endl;
+        cout << "[" << temp.Id << "\t\t" << temp.Title << "\t" << temp.Priority << "\t" << temp.PageSize << "]" << endl;
 
         completeproj << temp.Id;
         completeproj << endl;
@@ -247,16 +257,12 @@ void projectDetailList::GetProject()
         completeproj << endl;
 
         proj.pop_front();
-        cout<<"[Current Project is completed]"<<endl;
+        cout << "[Current Project is completed]" << endl;
     }
 
-    cout<<"\n\t\t[[[All projects have been processed]]]"<<endl;
-
+    cout << "\n\t\t[[[All projects have been processed]]]" << endl;
 }
 
 void projectDetailList::CompletedProjects()
 {
-
-
-
 }
