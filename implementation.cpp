@@ -27,7 +27,7 @@ void projectDetailList::addProject(projectDetail move)
     if (!projectHead)
     {
         projectHead = projectListNewNode;
-        lastCode = -1;
+        lastCode = 0;
         projectListNewNode->move.Id = 0;
         isempty = 1;
     }
