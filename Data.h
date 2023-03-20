@@ -29,12 +29,15 @@ class projectDetailList
     };
 
     projectListNode * projectHead;
-
+    
     public: 
+        deque <projectDetail> proj;         //new deque for Scheduling Functions
         projectDetailList();
 
         void addProject(projectDetail projectDetail);
         void openProjectFile();
         void saveProjectFile();
+        void CreateSched();
+        void ViewUpdatedSched();
 
 };
