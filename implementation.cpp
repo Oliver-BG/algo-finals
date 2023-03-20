@@ -224,3 +224,39 @@ void projectDetailList::ViewUpdatedSched(){
     }
 }
 
+void projectDetailList::GetProject()
+{
+    ofstream completeproj("completeproj.txt");
+    if(proj.empty()){
+        cout<<"Currently you have not created a schedule yet"<<endl;
+        return;
+    }
+    projectDetail temp;
+    while(!proj.empty()){
+        temp = proj.front();
+        cout<<"[Project Id\tProject Title\tProjectPriority\tProjectPageSize]"<<endl;
+        cout<<"["<<temp.Id<<"\t\t"<<temp.Title<<"\t"<<temp.Priority<<"\t"<<temp.PageSize<<"]"<<endl;
+
+        completeproj << temp.Id;
+        completeproj << endl;
+        completeproj << temp.Title;
+        completeproj << endl;
+        completeproj << temp.PageSize;
+        completeproj << endl;
+        completeproj << temp.Priority;
+        completeproj << endl;
+
+        proj.pop_front();
+        cout<<"[Current Project is completed]"<<endl;
+    }
+
+    cout<<"\n\t\t[[[All projects have been processed]]]"<<endl;
+
+}
+
+void projectDetailList::CompletedProjects()
+{
+
+
+
+}

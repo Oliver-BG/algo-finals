@@ -51,6 +51,9 @@ int main()
                     }
                 }while(choice != 3);
             break;
+        case 4:
+            projectObject.GetProject();
+            break;
         case 5:
             return 0;
         }

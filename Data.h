@@ -41,5 +41,7 @@ class projectDetailList
         void saveProjectFile();
         void CreateSched();
         void ViewUpdatedSched();
+        void GetProject();
+        void CompletedProjects();
 
 };
