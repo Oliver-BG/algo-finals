@@ -84,16 +84,16 @@ void projectDetailList::openProjectFile()
     int projectPageSize;
     int projectPriority;
 
-    while (getline(openProjectFile, tempString))
+    while (openProjectFile.eof())
     {
-        cout << tempString;
 
         projectListNewNode = new projectListNode;
 
-        projectListNewNode->move.Id = projectId;
-        projectListNewNode->move.Title = projectTitle;
-        projectListNewNode->move.PageSize = projectPageSize;
-        projectListNewNode->move.Priority = projectPriority;
+        openProjectFile >> projectListNewNode->move.Id;
+        openProjectFile.ignore();
+        getline(openProjectFile, projectListNewNode->move.Title, '\n');
+        openProjectFile >> projectListNewNode->move.PageSize;
+        openProjectFile >> projectListNewNode->move.Priority;
 
         projectListNewNode->Next = NULL;
 
@@ -121,25 +121,23 @@ void projectDetailList::saveProjectFile()
 
     while (projectFile != NULL)
     {
-        projectFileText << "Project ID: ";
         projectFileText << projectFile->move.Id;
+        projectFileText << " iD";
         projectFileText << endl;
 
-        projectFileText << "Project Title: ";
         projectFileText << projectFile->move.Title;
+        projectFileText << " Project Title";
         projectFileText << endl;
 
-        projectFileText << "Project Page Size: ";
         projectFileText << projectFile->move.PageSize;
+        projectFileText << " Project Page Size";
         projectFileText << endl;
 
-        projectFileText << "Project Priority: ";
         projectFileText << projectFile->move.Priority;
+        projectFileText << " Project Priority";
         projectFileText << endl;
-
         projectFile = projectFile->Next;
     }
-    projectFileText.close();
 }
 
 void projectDetailList::CreateSched() // functions below are new functions for scheduling functions
