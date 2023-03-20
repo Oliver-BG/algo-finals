@@ -145,33 +145,66 @@ void projectDetailList::saveProjectFile()
 
 void projectDetailList::CreateSched()               //functions below are new functions for scheduling functions
 {
+    //clears data from queue when called again considering queue is not empty
+    if(!proj.empty())
+        while(!proj.empty())
+            proj.pop_front();
+
     projectDetail temp = projectDetail();
-    projectListNode *projectnword, *projectnword2;
+    list<projectDetail> templist;
+    projectListNode *projectword;
     //sorts linked list first with lower priority means higher priority and if same, sort by page size in ascending order
-    for(projectnword = projectHead; projectnword->Next != NULL;projectnword=projectnword->Next){
-        for(projectnword2=projectnword->Next; projectnword2->Next != NULL; projectnword2=projectnword2->Next){
-            if(projectnword->move.Priority > projectnword2->move.Priority){
-                temp = projectnword->move;
-                projectnword->move = projectnword2->move;
-                projectnword2->move = temp;
+    for(projectword = projectHead; projectword != NULL ;projectword=projectword->Next){
+        templist.push_front(projectword->move);
+    }
+    list<projectDetail>::iterator prt;
+
+    for(auto prt = templist.begin(); prt != templist.end(); ++prt){
+        for(auto prt2 = templist.begin(); prt2 != templist.end(); ++prt2){
+            if(prt->Priority > prt2->Priority){
+                temp.Id = prt->Id;
+                temp.PageSize = prt->PageSize;
+                temp.Priority = prt->Priority;
+                temp.Title = prt->Title;
+                
+                prt->Id = prt2 -> Id;
+                prt->PageSize = prt2 -> PageSize;
+                prt->Priority = prt2 -> Priority;
+                prt->Title = prt2 -> Title;
+
+                prt2->Id = temp.Id;
+                prt2->PageSize = temp.PageSize;
+                prt2->Priority = temp.Priority;
+                prt2->Title = temp.Title;
             }
-            else if((projectnword->move.Priority == projectnword2->move.Priority)&&
-            (projectnword->move.PageSize > projectnword2->move.PageSize)){
-                temp = projectnword->move;
-                projectnword->move = projectnword2->move;
-                projectnword2->move = temp;
+            else if((prt->Priority == prt2->Priority)&&(prt->PageSize > prt2->PageSize)){
+                temp.Id = prt->Id;
+                temp.PageSize = prt->PageSize;
+                temp.Priority = prt->Priority;
+                temp.Title = prt->Title;
+                
+                prt->Id = prt2 -> Id;
+                prt->PageSize = prt2 -> PageSize;
+                prt->Priority = prt2 -> Priority;
+                prt->Title = prt2 -> Title;
+
+                prt2->Id = temp.Id;
+                prt2->PageSize = temp.PageSize;
+                prt2->Priority = temp.Priority;
+                prt2->Title = temp.Title;
             }
         }
     }
-    projectnword = projectHead;
-        while(projectnword != NULL){
-            temp = projectnword->move;
+        for(auto prt = templist.begin(); prt != templist.end(); ++prt){
+            temp.Id = prt->Id;
+            temp.PageSize = prt->PageSize;
+            temp.Priority = prt->Priority;
+            temp.Title = prt->Title;
             proj.push_front(temp);
-            projectnword = projectnword->Next;
         }
 
     if(!proj.empty())
-        cout<<"Created A Schedule"<<endl;
+        cout<<"Created A New Schedule"<<endl;
     else
         cout<<"Schedule wasn't successfully created"<<endl;
 }
@@ -187,6 +220,7 @@ void projectDetailList::ViewUpdatedSched(){
     while(!temp2.empty()){
         temp1 = temp2.front();
         cout<<temp1.Id<<"\t"<<temp1.Title<<"\t"<<temp1.Priority<<"\t"<<temp1.PageSize<<endl;
+        temp2.pop_front();
     }
 }
 

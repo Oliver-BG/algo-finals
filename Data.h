@@ -4,6 +4,8 @@
 #include <string.h> //String Library
 #include <stack> //Stack Library
 #include <deque> //Double ended queue
+#include <iterator>
+#include <list>
 
 #include <sstream> //To operate on strings
 #include <fstream> //Represents the file stream generally
