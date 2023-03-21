@@ -38,6 +38,12 @@ void projectDetailList::openProjectFile()
 
     openProjectFile.open("Projects.txt");
 
+    if(openProjectFile.is_open())
+        cout<<"Projects.txt Exist"<<endl;
+    else{
+        cout<<"Projects.txt does not Exist"<<endl;
+        return;  
+    }
     projectDetail temp = projectDetail();
     while (!openProjectFile.eof())
     {
@@ -227,6 +233,13 @@ bool projectDetailList::projectidexist(int id, list<projectDetail> a)
 void projectDetailList::openCompletedProj()
 {
     ifstream compproj("completeproj.txt");
+
+    if(compproj.is_open())
+        cout<<"completeproj.txt Exist"<<endl;
+    else{
+        cout<<"completeproj.txt does not Exist"<<endl;
+        return;  
+    }
     
     projectDetail temp;
     if(compproj.is_open())
