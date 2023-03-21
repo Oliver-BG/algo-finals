@@ -40,6 +40,8 @@ class projectDetailList
         void addProject(projectDetail projectDetail);
         void openProjectFile();
         void saveProjectFile();
+        void viewOneProject();
+        void viewAllProjects();
         void CreateSched();
         void ViewUpdatedSched();
         void GetProject();

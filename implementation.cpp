@@ -208,6 +208,57 @@ void projectDetailList::CreateSched() // functions below are new functions for s
         cout << "Schedule wasn't successfully created" << endl;
 }
 
+void projectDetailList::viewOneProject()
+{
+    int tempProjectId;
+    cout << "Enter Project ID: ";
+    cin >> tempProjectId;
+
+    projectListNode *foundProject;
+    foundProject = projectHead;
+
+    while (foundProject->move.Id != tempProjectId)
+    {
+        foundProject = foundProject->Next;
+    }
+
+    if(foundProject->move.Id == tempProjectId)
+    {
+        cout << endl << "Project ID: " << foundProject->move.Id << endl;
+        cout << "Project Title: " << foundProject->move.Title << endl;
+        cout << "Project Page Size: " << foundProject->move.PageSize << endl;
+        cout << "Project Priority: " << foundProject->move.Priority << endl;
+    }
+    else
+    {
+        cout << "Project doesn't exist";
+    }
+
+}
+
+void projectDetailList::viewAllProjects()
+{
+    cout << "Displaying all projects" << endl;
+
+    projectListNode *projectTemp;
+    projectTemp = projectHead;
+
+    while(projectTemp)
+    {
+        cout << "Project ID: " << projectTemp->move.Id << endl;
+        cout << "Project TItle: " << projectTemp->move.Title << endl;
+        cout << "Project Page size: " << projectTemp->move.PageSize << endl;
+        cout << "Project Priority: " << projectTemp->move.Priority << endl;
+
+        projectTemp = projectTemp->Next;
+        if(projectTemp == NULL)
+        {
+            break;
+        }
+    }
+    system("pause");
+}
+
 void projectDetailList::ViewUpdatedSched()
 {
     projectDetail temp1 = projectDetail();
