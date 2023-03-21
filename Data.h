@@ -23,29 +23,23 @@ struct projectDetail
 class projectDetailList
 {
     private:
-    
-    struct projectListNode
-    {
-        projectDetail move;
-        struct projectListNode* Next;
-    };
-
-    projectListNode * projectHead;
-    
+    deque <projectDetail> proj;         //new deque for Scheduling Functions
+    list<projectDetail> completed;
+    list<projectDetail> read;
     public: 
-        deque <projectDetail> proj;         //new deque for Scheduling Functions
-        list<projectDetail> completed;
+        
         projectDetailList();
 
-        void addProject(projectDetail projectDetail);
+        void addProject();
         void openProjectFile();
+        void openCompletedProj();
         void saveProjectFile();
-        void viewOneProject();
-        void viewAllProjects();
         void CreateSched();
         void ViewUpdatedSched();
         void GetProject();
         void CompletedProjects();
-        void projectexistenceincompleteproject();
-
+        bool projectidexist(int id, list<projectDetail> a);
+        void checkprojectiddupe();
+        void viewAllProjects();
+        void viewOneProject();
 };

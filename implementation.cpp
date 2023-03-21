@@ -1,69 +1,33 @@
 #include "Data.h"
 using namespace std;
-
 projectDetailList::projectDetailList()
 {
-    projectHead = NULL;
+    openProjectFile();
+    openCompletedProj();
+    checkprojectiddupe();
 }
-
-void projectDetailList::addProject(projectDetail move)
+void projectDetailList::addProject()
 {
 
-    int lastCode;
-    int projectId;            // project iD number
-    std::string projectTitle; // project title
-    int projectPageSize;      // project page sizew
-    int priority;             // for priority sorting
-
-    int isEmpty = 0;
-
-    projectListNode *moveNodePtr = projectHead;
-    projectListNode *projectNewNode;
-
-    projectNewNode = new projectListNode;
-    projectNewNode->Next = NULL;
-
-    if (!projectHead)
+    projectDetail tempd = projectDetail();
+    tempd.Id = 1;
+    while(projectidexist(tempd.Id, read) || projectidexist(tempd.Id, completed))
     {
-        projectHead = projectNewNode;
-        lastCode = 0;
-        projectNewNode->move.Id = 1;
-        isEmpty = 1;
+        tempd.Id = tempd.Id + 1;
     }
-    else
-    {
-        while (moveNodePtr->Next)
-        {
-            moveNodePtr = moveNodePtr->Next;
-        }
-        lastCode = moveNodePtr->move.Id;
-        moveNodePtr->Next = projectNewNode;
-    }
-
-    cout << "Project Id : " << lastCode + 1 << endl;
+    cout << "Project Id : " << tempd.Id << endl;
     cin.ignore(1);
 
     cout << "Enter the title of the Project: ";
-    getline(cin, projectTitle);
+    getline(cin, tempd.Title);
 
     cout << "Enter the Project Page Size: ";
-    cin >> projectPageSize;
+    cin >> tempd.PageSize;
 
     cout << "Enter the Project's Priority: ";
-    cin >> priority;
+    cin >> tempd.Priority;
 
-    projectNewNode->move.Id = lastCode + 1;
-    projectNewNode->move.Title = projectTitle;
-    projectNewNode->move.PageSize = projectPageSize;
-    projectNewNode->move.Priority = priority;
-
-    if (!isEmpty)
-    {
-
-        moveNodePtr = moveNodePtr->Next;
-
-        moveNodePtr->move.Id = lastCode + 1;
-    }
+    read.push_back(tempd);
 
     cout << "\nYou have successfully added the Project!\n";
 }
@@ -71,38 +35,26 @@ void projectDetailList::addProject(projectDetail move)
 void projectDetailList::openProjectFile()
 {
     ifstream openProjectFile;
+
     openProjectFile.open("Projects.txt");
 
-    projectListNode *projectListNewNode;
-
-    projectListNode *openFilePtr = projectHead;
-
-    string tempString;
-
-
-    while (openProjectFile.eof())
+    if(openProjectFile.is_open())
+        cout<<"Projects.txt Exist"<<endl;
+    else{
+        cout<<"Projects.txt does not Exist"<<endl;
+        return;  
+    }
+    projectDetail temp = projectDetail();
+    while (!openProjectFile.eof())
     {
-
-        projectListNewNode = new projectListNode;
-
-        openProjectFile >> projectListNewNode->move.Id;
+        openProjectFile >> temp.Id;
         openProjectFile.ignore();
-        getline(openProjectFile, projectListNewNode->move.Title, '\n');
-        openProjectFile >> projectListNewNode->move.PageSize;
-        openProjectFile >> projectListNewNode->move.Priority;
-
-        projectListNewNode->Next = NULL;
-
-        if (!projectHead)
-        {
-            projectHead = projectListNewNode;
-            openFilePtr = projectHead;
-        }
-        else
-        {
-            openFilePtr->Next = projectListNewNode;
-            openFilePtr = openFilePtr->Next;
-        }
+        getline(openProjectFile, temp.Title, '\n');
+        openProjectFile >> temp.PageSize;
+        openProjectFile >> temp.Priority;
+        if(temp.Id != 0)
+        read.push_back(temp);
+        temp = {};
     }
 
     openProjectFile.close();
@@ -111,29 +63,23 @@ void projectDetailList::openProjectFile()
 void projectDetailList::saveProjectFile()
 {
     ofstream projectFileText;
-    projectFileText.open("Projects.txt");
-    projectListNode *projectFile;
-    projectFile = projectHead;
+    projectFileText.open("Projects.txt", std::ios::trunc);
 
-    while (projectFile != NULL)
+    for(auto i = read.begin(); i != read.end(); ++i)
     {
-        projectFileText << projectFile->move.Id;
-        projectFileText << " iD";
+        projectFileText << i->Id;
         projectFileText << endl;
 
-        projectFileText << projectFile->move.Title;
-        projectFileText << " Project Title";
+        projectFileText << i->Title;
         projectFileText << endl;
 
-        projectFileText << projectFile->move.PageSize;
-        projectFileText << " Project Page Size";
+        projectFileText << i->PageSize;
         projectFileText << endl;
 
-        projectFileText << projectFile->move.Priority;
-        projectFileText << " Project Priority";
+        projectFileText << i->Priority;
         projectFileText << endl;
-        projectFile = projectFile->Next;
     }
+    projectFileText.close();
 }
 
 void projectDetailList::CreateSched() // functions below are new functions for scheduling functions
@@ -145,12 +91,8 @@ void projectDetailList::CreateSched() // functions below are new functions for s
 
     projectDetail temp = projectDetail();
     list<projectDetail> templist;
-    projectListNode *projectword;
     // sorts linked list first with lower priority means higher priority and if same, sort by page size in ascending order
-    for (projectword = projectHead; projectword != NULL; projectword = projectword->Next)
-    {
-        templist.push_front(projectword->move);
-    }
+    templist = read;
     list<projectDetail>::iterator prt;
 
     for (auto prt = templist.begin(); prt != templist.end(); ++prt)
@@ -208,78 +150,27 @@ void projectDetailList::CreateSched() // functions below are new functions for s
         cout << "Schedule wasn't successfully created" << endl;
 }
 
-void projectDetailList::viewOneProject()
-{
-    int tempProjectId;
-    cout << "Enter Project ID: ";
-    cin >> tempProjectId;
-
-    projectListNode *foundProject;
-    foundProject = projectHead;
-
-    while (foundProject->move.Id != tempProjectId)
-    {
-        foundProject = foundProject->Next;
-    }
-
-    if(foundProject->move.Id == tempProjectId)
-    {
-        cout << endl << "Project ID: " << foundProject->move.Id << endl;
-        cout << "Project Title: " << foundProject->move.Title << endl;
-        cout << "Project Page Size: " << foundProject->move.PageSize << endl;
-        cout << "Project Priority: " << foundProject->move.Priority << endl;
-    }
-    else
-    {
-        cout << "Project doesn't exist";
-    }
-
-}
-
-void projectDetailList::viewAllProjects()
-{
-    cout << "Displaying all projects" << endl;
-
-    projectListNode *projectTemp;
-    projectTemp = projectHead;
-
-    while(projectTemp)
-    {
-        cout << "Project ID: " << projectTemp->move.Id << endl;
-        cout << "Project TItle: " << projectTemp->move.Title << endl;
-        cout << "Project Page size: " << projectTemp->move.PageSize << endl;
-        cout << "Project Priority: " << projectTemp->move.Priority << endl;
-
-        projectTemp = projectTemp->Next;
-        if(projectTemp == NULL)
-        {
-            break;
-        }
-    }
-    system("pause");
-}
-
 void projectDetailList::ViewUpdatedSched()
 {
     projectDetail temp1 = projectDetail();
-    deque<projectDetail> temp2;
-    temp2 = proj;
+    deque<projectDetail> temp2 = proj;
     if (temp2.empty())
     {
         cout << "There's no created schedule yet." << endl;
         return;
     }
+    cout<<"ID\t\tTitle\t\tPageSize\tPriority"<<endl;
     while (!temp2.empty())
     {
         temp1 = temp2.front();
-        cout << temp1.Id << "\t" << temp1.Title << "\t" << temp1.Priority << "\t" << temp1.PageSize << endl;
+        cout << temp1.Id << "\t\t" << temp1.Title << "\t\t" << temp1.Priority << "\t" << temp1.PageSize << endl;
         temp2.pop_front();
     }
 }
 
 void projectDetailList::GetProject()
 {
-    ofstream completeproj("completeproj.txt");
+    ofstream completeproj("completeproj.txt", std::ios::app);
     if (proj.empty())
     {
         cout << "Currently you have not created a schedule yet" << endl;
@@ -290,8 +181,16 @@ void projectDetailList::GetProject()
     {
         temp = proj.front();
         cout << "[Project Id\tProject Title\tProjectPriority\tProjectPageSize]" << endl;
-        cout << "[" << temp.Id << "\t\t" << temp.Title << "\t" << temp.Priority << "\t" << temp.PageSize << "]" << endl;
+        cout << "[" << temp.Id << "\t\t" << temp.Title << "\t\t" << temp.Priority << "\t\t" << temp.PageSize << "\t]" << endl;
 
+        list<projectDetail>::iterator i;
+        for(auto i = read.begin(); i != read.end(); ++i)
+        {
+            if(i->Id == temp.Id){
+                read.erase(i);
+                break;
+            }    
+        }
         completeproj << temp.Id;
         completeproj << endl;
         completeproj << temp.Title;
@@ -310,25 +209,104 @@ void projectDetailList::GetProject()
 
 void projectDetailList::CompletedProjects()
 {
-    ifstream compproj("completeproj.txt");
-    projectDetail temp;
-    while(!compproj.eof()){
-        compproj >> temp.Id;
-        compproj.ignore();
-        getline(compproj, temp.Title, '\n');
-        compproj >> temp.PageSize;
-        compproj >> temp.Priority;
-        completed.push_back(temp);
-    }
     list<projectDetail>::iterator i;
+    if(completed.empty()){
+        cout<<"You have no currently completed Projects"<<endl;
+        return;
+    }
     cout<<"ID\t\tTitle\t\tPageSize\tPriority\n"<<endl;
     for(auto i = completed.begin(); i != completed.end(); ++i){
         cout<<i->Id<<"\t\t"<<i->Title<<"\t\t"<<i->PageSize<<"\t\t"<<i->Priority<<endl;
     }
 }
 
-void projectDetailList::projectexistenceincompleteproject()
+bool projectDetailList::projectidexist(int id, list<projectDetail> a)
 {
+    list<projectDetail>::iterator i;
+    for(auto i = a.begin(); i != a.end(); ++i){
+        if(id == i->Id)
+            return true;
+    }
+    return false;
+}
 
+void projectDetailList::openCompletedProj()
+{
+    ifstream compproj("completeproj.txt");
 
+    if(compproj.is_open())
+        cout<<"completeproj.txt Exist"<<endl;
+    else{
+        cout<<"completeproj.txt does not Exist"<<endl;
+        return;  
+    }
+    
+    projectDetail temp;
+    if(compproj.is_open())
+    while(!compproj.eof()){
+        compproj >> temp.Id;
+        compproj.ignore();
+        getline(compproj, temp.Title, '\n');
+        compproj >> temp.PageSize;
+        compproj >> temp.Priority;
+        if(temp.Id != 0)
+        completed.push_back(temp);
+        temp = {};
+    }
+    else
+        cout<<"There's no existing Complete Projects"<<endl;
+}
+void projectDetailList::checkprojectiddupe()
+{
+    for (auto i =read.begin(); i != read.end(); ++i)
+        for(auto j = completed.begin(); j != completed.end(); ++j)
+        {
+            if(i->Id == j->Id)
+            {
+                cout<<"There is a duplicated ID, proceeding to erase duplicate completed project..."<<endl;
+                completed.erase(j);
+            }
+        }
+}
+
+void projectDetailList::viewOneProject()
+{
+    int tempProjectId;
+    bool exist;
+    cout << "Enter Project ID: ";
+    cin >> tempProjectId;
+
+    for(auto i = read.begin(); i != read.end(); ++i){
+        if(i->Id == tempProjectId)
+        {
+            cout << endl << "Project ID: \t\t" << i->Id << endl;
+            cout << "Project Title: \t\t" << i->Title << endl;
+            cout << "Project Page Size: \t\t" << i->PageSize << endl;
+            cout << "Project Priority: \t\t" << i->Priority << endl;
+            exist = true;
+            return;
+        }
+    
+    }
+    if(!exist)
+        {
+            cout << "Project doesn't exist";
+        }
+}
+
+void projectDetailList::viewAllProjects()
+{   
+    if(read.empty()){
+        cout<<"No Available Projects yet"<<endl;
+        return;
+    }
+    cout << "Displaying all projects" << endl;
+    cout<<"ID\t\tTitle\t\tPageSize\tPriority"<<endl;
+    for(auto i = read.begin(); i != read.end(); ++i)    
+    {
+        cout << "" << i->Id << "\t\t";
+        cout << "" << i->Title << "\t\t";
+        cout << "" << i->PageSize << "\t\t";
+        cout << "" << i->Priority << "\t" << endl;
+    }
 }
