@@ -7,7 +7,7 @@ int main()
     // testing push for file-handling branch
     // tangina nababaliw na ako
     projectDetailList projectObject;
-
+    
     int input;
     while (true)
     {
